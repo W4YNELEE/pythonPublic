@@ -3,7 +3,8 @@ import fileOperation as file
 
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
-from PIL import Image
+from selenium.webdriver.common.keys import Keys
+
 
 class Ck101_verify_code_crawler():
     def __init__(self):
@@ -62,14 +63,16 @@ class Ntltd_verify_code_crawler(Ck101_verify_code_crawler):
         self.driver.get(x)
         print("Reach successful")
         time.sleep(1)
-        self.driver.find_element_by_link_text("登入").send_keys(Keys.RETURN)
-        print("已鍵入")
+        try:
+            self.driver.find_element_by_link_text("登入").send_keys(Keys.RETURN)
+            print("已鍵入")
+        except:
+            pass
 
     def get_verify_code(self,qty):
         for i in range(0,qty):
-            element=self.driver.find_element_by_xpath("//*[@id='random_img_div1']/img")
+            element=self.driver.find_element_by_xpath('//*[@class="dispcheckimg_div"]/img')
             element.screenshot("%s/final%d.png"%(self.ntltd_dir_name,(i+1)))
-            
             print(element.size)
             print("第%d張圖片擷取完成"%(i+1))
             self.driver.refresh()
@@ -80,9 +83,50 @@ class Ntltd_verify_code_crawler(Ck101_verify_code_crawler):
         self.go_to_ntltd()
         self.get_verify_code(x)
 
+class Thsrc_crawler(Ck101_verify_code_crawler):
+    def __init__(self):
+        self.thsrc_dir_name='tshrc'
+        file.mkdir(self.thsrc_dir_name)
+        
+    def go_to_thsrc(self):
+        super().__init__()
+        x = 'https://irs.thsrc.com.tw/IMINT/?locale=tw'
+        self.driver.get(x)
+        print("reach successful")
+        time.sleep(1)
+        
+    def click_btn(self):
+        time.sleep(2)
+        try:
+            self.driver.find_element_by_xpath('//*[@id="btn-confirm"]').send_keys(Keys.RETURN)
+            print("clicked I agree")
+    
+        except:
+            print("nothing happened")
+            pass
 
-mission = Ntltd_verify_code_crawler()
-mission.get_the_code2(2)
+    def save_the_code(self, qty):
+        for i in range(0, qty):
+            element = self.driver.find_element_by_id("BookingS1Form_\
+                                                     homeCaptcha_passCode")
+            element.screenshot("%s/final%d.png"%(self.thsrc_dir_name,(i+1)))
+
+            print(element.size)
+            print("第%d張圖片擷取完成"%(i+1))
+            self.driver.refresh()
+            time.sleep(1)
+
+    def get_the_code(self, x):
+        self.go_to_thsrc()
+        self.click_btn()
+        #self.save_the_code(x)
+        
+
+mission = Thsrc_crawler()
+mission.get_the_code(2)
+
+#mission = Ntltd_verify_code_crawler()
+#mission.get_the_code2(2)
 
 #mission = Ck101_verify_code_crawler()
 #mission.get_the_code(3) #數量
