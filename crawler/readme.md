@@ -2,7 +2,7 @@
 
 > 作者：W4YNELEE
 
-## 事前安裝
+### 事前安裝
 
 ```cmd
 $pip install selenium
@@ -38,11 +38,14 @@ mission.get_the_code(3) #input要爬的數量
 <br>
 ![圖片](img3.png "result")
 
-***
+<br>
 
 ## 2.google爬圖
-## 事前安裝
+```
+google_picture_crawler.ipynb
+```
 
+### 事前安裝
 ```cmd
 $pip install selenium
 $pip install opencv-python
@@ -50,9 +53,6 @@ $pip install bs4
 $pip install matplotlib
 ```
 
-```
-google_picture_crawler.ipynb
-```
 
 * 此程式會針對要找的圖片建立路徑且從google爬圖存取
 * 將關鍵字鍵入`keyword.txt`，預設是`cat`
